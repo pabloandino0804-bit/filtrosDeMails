@@ -9,7 +9,7 @@ import ar.edu.unahur.obj2.composite.filtros.Filtro;
 public class FiltroOR implements Filtro{
     private List<Filtro> filtros;
 
-    public FiltroOR(Filtro filtros){
+    public FiltroOR(Filtro... filtros){
         this.filtros = Arrays.asList(filtros);
     }
 

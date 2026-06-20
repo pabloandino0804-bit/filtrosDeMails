@@ -10,7 +10,7 @@ public class FiltroAND implements Filtro{
 
     private List<Filtro> filtros;
 
-    public FiltroAND(Filtro filtros){
+    public FiltroAND(Filtro... filtros){
         this.filtros = Arrays.asList(filtros);
     }
 
