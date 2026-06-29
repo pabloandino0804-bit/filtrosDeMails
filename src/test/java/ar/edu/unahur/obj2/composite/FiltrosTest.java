@@ -12,19 +12,22 @@ import ar.edu.unahur.obj2.composite.filtros.FiltroRemitente;
 import ar.edu.unahur.obj2.composite.filtros.FiltroTamaño;
 import ar.edu.unahur.obj2.composite.filtros.FiltroTieneAdjunto;
 import ar.edu.unahur.obj2.composite.filtros.filtroscompuestos.FiltroAND;
+import ar.edu.unahur.obj2.composite.filtros.filtroscompuestos.FiltroNOR;
+import ar.edu.unahur.obj2.composite.filtros.filtroscompuestos.FiltroNAND;
 import ar.edu.unahur.obj2.composite.filtros.filtroscompuestos.FiltroNot;
 import ar.edu.unahur.obj2.composite.filtros.filtroscompuestos.FiltroOR;
 
 public class FiltrosTest {
     @Test
     void queElCuerpoTengaLaPalabraImportante() {
-        Correo unCorreo = new Correo("Junta importante por inicio de actividades", 220, "Hoy habra una reunion importante");
+        Correo unCorreo = new Correo("Junta importante por inicio de actividades", 220,
+                "Hoy habra una reunion importante");
 
         assertTrue(unCorreo.getCuerpo().contains("importante"));
     }
 
     @Test
-    void QueUnFiltroPorAsuntoCumplaCuandoCumpleLaCondicionExacta(){
+    void QueUnFiltroPorAsuntoCumplaCuandoCumpleLaCondicionExacta() {
         Correo unCorreo = new Correo("Junta importante por inicio de actividades", 220, "Reunion necesaria");
         FiltroPorAsunto filtro = new FiltroPorAsunto("importante");
 
@@ -34,8 +37,9 @@ public class FiltrosTest {
     }
 
     @Test
-    void QueUnFiltroTieneAdjuntoCumplaCuandoCumpleLaCondicionExacta(){
-        Correo unCorreo = new Correo("Roberto", "Juan", "Junta importante por inicio de actividades", 220, true,"Reunion necesaria");
+    void QueUnFiltroTieneAdjuntoCumplaCuandoCumpleLaCondicionExacta() {
+        Correo unCorreo = new Correo("Roberto", "Juan", "Junta importante por inicio de actividades", 220, true,
+                "Reunion necesaria");
         FiltroTieneAdjunto filtroAdjunto = new FiltroTieneAdjunto();
 
         Boolean obtenido = filtroAdjunto.cumple(unCorreo);
@@ -44,8 +48,9 @@ public class FiltrosTest {
     }
 
     @Test
-    void QueUnFiltroTamañoCumplaCuandoCumpleLaCondicionExacta(){
-        Correo unCorreo = new Correo("Roberto", "Juan", "Junta importante por inicio de actividades", 220, true,"Reunion necesaria");
+    void QueUnFiltroTamañoCumplaCuandoCumpleLaCondicionExacta() {
+        Correo unCorreo = new Correo("Roberto", "Juan", "Junta importante por inicio de actividades", 220, true,
+                "Reunion necesaria");
         FiltroTamaño filtroTamaño = new FiltroTamaño(210);
 
         Boolean obtenido = filtroTamaño.cumple(unCorreo);
@@ -54,9 +59,10 @@ public class FiltrosTest {
     }
 
     @Test
-    void QueUnFiltroANDNoCumplaCuandoNoCumplenSusCondiciones(){
-        Correo unCorreo = new Correo("Roberto", "Juan", "Junta importante por inicio de actividades", 220, false,"Reunion necesaria");
-        
+    void QueUnFiltroANDNoCumplaCuandoNoCumplenSusCondiciones() {
+        Correo unCorreo = new Correo("Roberto", "Juan", "Junta importante por inicio de actividades", 220, false,
+                "Reunion necesaria");
+
         FiltroDestino filtroDestino = new FiltroDestino("null");
         FiltroRemitente filtroRemitente = new FiltroRemitente("null");
         FiltroPorAsunto filtro1 = new FiltroPorAsunto("importante");
@@ -71,12 +77,11 @@ public class FiltrosTest {
     }
 
     @Test
-    void QueUnFiltroORCumplaCuandoCuandoSeCumpleAlgunaDeSusFunciones(){
+    void QueUnFiltroORCumplaCuandoCuandoSeCumpleAlgunaDeSusFunciones() {
         Correo unCorreo = new Correo("Junta importante por inicio de actividades", 220, "Reunion necesaria");
-        
+
         FiltroDestino filtroDestino = new FiltroDestino("Juan");
         FiltroRemitente filtroRemitente = new FiltroRemitente("Roberto Matias");
-        
 
         FiltroPorAsunto filtro1 = new FiltroPorAsunto("alto");
         FiltroTamaño filtro2 = new FiltroTamaño(210);
@@ -91,7 +96,7 @@ public class FiltrosTest {
 
     @Test
     void QueElFiltroNotAltereLaCondicionDeUnFiltroTamanioSiNoCumple() {
-        Correo unCorreo = new Correo("Junta importante por inicio de actividades", 220,"Reunion necesaria");
+        Correo unCorreo = new Correo("Junta importante por inicio de actividades", 220, "Reunion necesaria");
         FiltroTamaño filtroTamaño = new FiltroTamaño(240);
 
         Filtro filtroAlterado = new FiltroNot(filtroTamaño);
@@ -103,11 +108,12 @@ public class FiltrosTest {
 
     @Test
     void QueElFiltroRemitenteYFiltroDestinoCumplanConSusCondiciones() {
-        Correo unCorreo = new Correo("Roberto Matias", "Juan", "Junta importante por inicio de actividades", 220, false,"Reunion necesaria");
+        Correo unCorreo = new Correo("Roberto Matias", "Juan", "Junta importante por inicio de actividades", 220, false,
+                "Reunion necesaria");
 
         FiltroDestino filtroDestino = new FiltroDestino("Juan");
         FiltroRemitente filtroRemitente = new FiltroRemitente("Roberto Matias");
-        
+
         FiltroAND filtroAnd = new FiltroAND(filtroDestino, filtroRemitente);
 
         Boolean obtenido = filtroAnd.cumple(unCorreo);
@@ -116,13 +122,29 @@ public class FiltrosTest {
     }
 
     @Test
-    void Filtro() {
-        Correo unCorreo = new Correo("Roberto Matias", "Juan", "Junta importante por inicio de actividades", 220, false,"Reunion necesaria");
+    void DadoUnFliltroNAND_DebeDarVerdaderoSiUnoDeEllosNoCumple() {
+        Correo unCorreo = new Correo("Roberto Matias", "Juan", "Junta importante por inicio de actividades", 220, false,
+                "Reunion necesaria");
 
         FiltroDestino filtroDestino = new FiltroDestino("Juan");
-        FiltroRemitente filtroRemitente = new FiltroRemitente("Roberto Matias");
-        
-        FiltroAND filtro = new FiltroAND(filtroDestino, filtroRemitente);
+        FiltroRemitente filtroRemitente = new FiltroRemitente("Roberto Lopez");
+
+        Filtro filtro = new FiltroNAND(filtroDestino, filtroRemitente);
+
+        Boolean obtenido = filtro.cumple(unCorreo);
+
+        assertTrue(obtenido);
+    }
+
+    @Test
+    void DadoUnFliltroNOR_DebeDarVerdaderoSiTodosLosFiltrosNoCumple() {
+        Correo unCorreo = new Correo("Roberto Matias", "Juan", "Junta importante por inicio de actividades", 220, false,
+                "Reunion necesaria");
+
+        FiltroDestino filtroDestino = new FiltroDestino("Alejandro britez");
+        FiltroRemitente filtroRemitente = new FiltroRemitente("Roberto Lopez");
+
+        Filtro filtro = new FiltroNOR(filtroDestino, filtroRemitente);
 
         Boolean obtenido = filtro.cumple(unCorreo);
 
